@@ -8,7 +8,7 @@ parameters:
   required: true
 - name: NAMESPACE
   #required: true
-  value: "your-namespace"
+  value: "wking-next-gen-installer"
 - name: IMAGE_FORMAT
   required: true
 - name: IMAGE_INSTALLER
@@ -61,20 +61,7 @@ objects:
       emptyDir: {}
     - name: cluster-profile
       secret:
-        secretName: ${JOB_NAME_SAFE}-cluster-profile
-    - name: pull-secret-aws
-      secret:
-        secretName: cluster-secrets-aws
-    initContainers:
-    - name: cli
-      image: ${IMAGE_CLI}
-      volumeMounts:
-      - name: shared-tmp
-        mountPath: /tmp/shared
-      command:
-      - cp
-      - /usr/bin/oc
-      - /tmp/shared/oc
+        secretName: cluster-profile
 
     containers:
 
@@ -186,16 +173,13 @@ objects:
         mountPath: /etc/openshift-installer
       - name: artifacts
         mountPath: /tmp/artifacts
-      - name: pull-secret-aws
-        mountPath: /tmp/pull-secret-aws
       env:
       - name: INSTANCE_PREFIX
         value: ${NAMESPACE}-${JOB_NAME_HASH}
       - name: TYPE
         value: ${CLUSTER_TYPE}
       - name: AWS_SHARED_CREDENTIALS_FILE
-        #value: /etc/openshift-installer/.awscred
-        value: /tmp/cluster/credentials
+        value: /etc/openshift-installer/.awscred
       - name: KUBECONFIG
         value: /tmp/artifacts/installer/auth/kubeconfig
       command:
@@ -334,7 +318,7 @@ objects:
           wait
 
           echo "Deprovisioning cluster ..."
-          export AWS_SHARED_CREDENTIALS_FILE=/tmp/shared/cluster/credentials
+          export AWS_SHARED_CREDENTIALS_FILE=/etc/openshift-installer/.awscred
           openshift-install --dir /tmp/artifacts/installer --log-level debug destroy-cluster
         }
 
@@ -347,4 +331,3 @@ objects:
           fi
           sleep 60 & wait
         done
-

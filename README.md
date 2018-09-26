@@ -18,10 +18,9 @@ oc new-project your-namespace
 
 Create a secret to pass your local files: 
  ```bash
-oc create secret -n your-namespace generic cluster-secrets-aws \
-                    --from-file=secret/credentials \
+oc create secret -n your-namespace generic cluster-profile \
+                    --from-file=secret/.awscred \
                     --from-file=secret/pull-secret \
-                    --from-file=secret/ssh-privatekey \
                     --from-file=secret/ssh-publickey \
                     -o yaml --dry-run | oc -n your-namespace apply -f -
 ```
