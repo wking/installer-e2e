@@ -8,7 +8,7 @@ parameters:
   required: true
 - name: NAMESPACE
   #required: true
-  value: "somalley-test"
+  value: "your-namespace"
 - name: IMAGE_FORMAT
   required: true
 - name: IMAGE_INSTALLER
@@ -18,10 +18,8 @@ parameters:
 - name: CLUSTER_TYPE
   required: true
 - name: TEST_FOCUS
-  value: Suite:openshift/conformance/parallel
 - name: TEST_SKIP
 - name: TEST_FOCUS_SERIAL
-  value: Suite:openshift/conformance/serial
 - name: TEST_SKIP_SERIAL
 - name: TEST_PARALLELISM
   value: "30"
